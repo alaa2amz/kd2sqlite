@@ -224,43 +224,43 @@ create view kanji_finder as
 
     select 
     character.ch_id as id, 
-    character.literal as kanji
+    character.literal as kanji,
     
-    --cp_value.cp_value as code,
-    --cp_type.cp_type_name as code_type,
+    cp_value.cp_value as code,
+    cp_type.cp_type_name as code_type,
     
-    --rad_value.rad_value as radical_number,
-    --rad_type.rad_type_name as radical_type,
+    rad_value.rad_value as radical_number,
+    rad_type.rad_type_name as radical_type,
     
-    --grade.grade as grade,
-    --stroke_count.count as stroke_count,
-    --stroke_count.count_no as miscount,
+    grade.grade as grade,
+    stroke_count.count as stroke_count,
+    stroke_count.count_no as miscount,
     
-    --variant.var_value as variant_code,
-    --var_type.vartype_name as variant_code_type,
+    variant.var_value as variant_code,
+    var_type.vartype_name as variant_code_type,
     
-    --freq.freq_value as frequancy,
-    --jlpt.jlpt_level as jlpt_level,
+    freq.freq_value as frequancy,
+    jlpt.jlpt_level as jlpt_level,
     
-    --dic_ref.dic_ref as reference_number,
-    --dic_ref.m_volume as reference_volume,
-    --dic_ref.m_page as reference_page,
-    --dr_type.dr_type_name as reference_name, 
+    dic_ref.dic_ref as reference_number,
+    dic_ref.m_volume as reference_volume,
+    dic_ref.m_page as reference_page,
+    dr_type.dr_type_name as reference_name, 
     
-    --q_code.q_code as query_code,
-    --q_code.skip_misclass as skip_misclass,
-    --qc_type.qc_type_name as query_method_name,
+    q_code.q_code as query_code,
+    q_code.skip_misclass as skip_misclass,
+    qc_type.qc_type_name as query_method_name,
     
-    --reading.reading_value as reading,
-    --reading.r_status as jouyou_limit,
-    --r_type.r_type_name as reading_type,
+    reading.reading_value as reading,
+    reading.r_status as jouyou_limit,
+    r_type.r_type_name as reading_type,
     
-    --meaning.meaning_value as meaning,
-    --m_lang.m_lang_code_value as meaning_lang_code,
+    meaning.meaning_value as meaning,
+    m_lang.m_lang_code_value as meaning_lang_code,
     
-    --nanori.nanori_value as nanori_reading,
+    nanori.nanori_value as nanori_reading,
     
-    --rad_name.rad_name as radical_name 
+    rad_name.rad_name as radical_name 
     
     from 
     character
