@@ -1,5 +1,8 @@
+
 import xml.sax
 import sqlite3
+import datetime
+
 # 6355_5801_952_13108
 # kanjidic2 header
 #('霓', 38675)
@@ -15,34 +18,34 @@ class kanjidicHandler(xml.sax.handler.ContentHandler):
     crntChar = ""   # current kanji character.
     crntID = 0      # current character id "utf-8 code to decimal"
     count4ID = 0    # count for strok count occurances in the smae character
-
+    processed_kanji_counter = 0
     # tables tuples.
+
+    file_version = ""
+    database_version = ""
+    date_of_creation = ""
+    #timestamp = datetime.datetime
+    date_of_generation = ""
+
     character = []
     cp_value = []
-    #
     cp_type = []
     rad_value = []
-    #
     rad_type = []
     grade = []
     stroke_count = []
     variant = []
-    #
     var_type = []
     freq = []
     jlpt = []
     dic_ref = []
-    #
     dr_type = []
     rad_name = []
     q_code = []
-    #
     qc_type = []
     reading = []
-    #
     r_type = []
-    meaninig = []
-    #
+    meaning = []
     m_lang = []
     nanori = []
 
@@ -56,17 +59,32 @@ class kanjidicHandler(xml.sax.handler.ContentHandler):
     def startElement(self, name, attrs):
         self.crntElmnt = name
         self.crntAtrs = attrs
-        print(attrs.getNames())
         if name == "stroke_count":
             self.count4ID += 1
+
+        if name == "character":
+            self.processed_kanji_counter += 1
 
     def endElement(self, name):
         self.crntElmnt = ""
         self.crntAtrs = ""
         if name == "character":
             self.count4ID = 0
+            print("no of kanjis prrocessed",self.processed_kanji_counter)
+
 
     def characters(self, content):
+
+        if self.crntElmnt == "file_version":
+            self.file_version = content
+
+        if self.crntElmnt == "database_version":
+            self.database_version = content
+
+        if self.crntElmnt == "date_of_creation":
+            self.date_of_creation = content
+
+
 
         if self.crntElmnt == "literal":
             self.crntChar = content
@@ -168,7 +186,7 @@ class kanjidicHandler(xml.sax.handler.ContentHandler):
             else:
                 lang_id = self.m_lang.index(lang)
             tmpTuple = (self.crntID, content, lang_id)
-            self.meaninig.append(tmpTuple)
+            self.meaning.append(tmpTuple)
 
         elif self.crntElmnt == "nanori":
             tmpTuple = (self.crntID, content)
@@ -177,13 +195,18 @@ class kanjidicHandler(xml.sax.handler.ContentHandler):
     def endDocument(self):
         schema_file = open("kanjidic2_schema.sql","r")
         schema = schema_file.read()
-        print(schema)
-        import datetime
-        timestamp = datetime.datetime.now()
 
-        connection = sqlite3.connect("kanji_dic_sqlite" + timestamp.isoformat("_"))
+
+
+
+        kf = open("kanjidic2_" + self.date_of_creation + ".db","w")
+        kf.close()
+        connection = sqlite3.connect("kanjidic2_" + self.date_of_creation + ".db" )
         cursor = connection.cursor()
         cursor.executescript(schema)
+
+        cursor.execute("insert into header values (?,?,?,?,?)", (self.file_version, self.database_version, self.date_of_creation, self.date_of_generation, ""))
+
         cursor.executemany("insert into character values (?,?)", self.character)
 
         cursor.executemany("insert into	cp_type	values (?,?)", enumerate(self.cp_type))
@@ -213,7 +236,7 @@ class kanjidicHandler(xml.sax.handler.ContentHandler):
         cursor.executemany("insert into	reading	values (?,?,?,?)", self.reading)
 
         cursor.executemany("insert into	m_lang	values (?,?)", enumerate(self.m_lang))
-        cursor.executemany("insert into	meaning	values (?,?,?)", self.meaninig)
+        cursor.executemany("insert into	meaning	values (?,?,?)", self.meaning)
 
         cursor.executemany("insert into	nanori	values (?,?)", self.nanori)
 
