@@ -265,32 +265,32 @@ create view kanji_finder as
     from 
     character
     left join cp_value on cp_value.ch_id = character.ch_id
-    left join cp_type on cp_value.cp_type_id = cp_type.cp_type_id 
+     join cp_type on cp_value.cp_type_id = cp_type.cp_type_id 
     
     left join rad_value on rad_value.ch_id = character.ch_id
-    left join rad_type on rad_type.rad_type_id = rad_value.rad_type_id 
+     join rad_type on rad_type.rad_type_id = rad_value.rad_type_id 
     
     left join grade on grade.ch_id = character.ch_id
     left join stroke_count on stroke_count.ch_id = character.ch_id
     
     left join variant on variant.ch_id = character.ch_id
-    left join var_type on var_type.var_type_id = variant.var_type_id
+     join var_type on var_type.var_type_id = variant.var_type_id
     
     left join freq on freq.ch_id = character.ch_id
     left join jlpt on jlpt.ch_id = character.ch_id
     left join rad_name on rad_name.ch_id = character.ch_id
     
     left join dic_ref on dic_ref.ch_id = character.ch_id
-    left join dr_type on dr_type.dr_type_id = dic_ref.dr_type_id
+     join dr_type on dr_type.dr_type_id = dic_ref.dr_type_id
     
     left join q_code on q_code.ch_id = character.ch_id
-    left join qc_type on qc_type.qc_type_id = q_code.qc_type_id
+     join qc_type on qc_type.qc_type_id = q_code.qc_type_id
 
     left join reading on reading.ch_id = character.ch_id
-    left join r_type on r_type.r_type_id = reading.r_type_id
+     join r_type on r_type.r_type_id = reading.r_type_id
     
     left join meaning on meaning.ch_id = character.ch_id
-    left join m_lang on m_lang.m_lang_id = meaning.m_lang_id
+     join m_lang on m_lang.m_lang_id = meaning.m_lang_id
     
     left join nanori on nanori.ch_id = character.ch_id
 
