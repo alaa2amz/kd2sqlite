@@ -2,17 +2,23 @@
 import xml.sax
 import sqlite3
 import datetime
-
+import urllib.request as UR
+import gzip
 # 6355_5801_952_13108
 # kanjidic2 header
 #('霓', 38675)
 # 飴
 # dic_ref instead of number and it must converted to text
 # skip_misclass is text q_code
-
+kanji_dic_link = "http://www.edrdg.org/kanjidic/kanjidic2.xml.gz"
+downloaded_kanjidic_fileName = "kd2web.xml.gz"
+    
 
 class kanjidicHandler(xml.sax.handler.ContentHandler):
     """class to convert kanjiDic2.xml to sqlite tables  """
+    
+    
+    
     crntElmnt = ""  # current element.
     crntAtrs = {}  # current attributes.
     crntChar = ""   # current kanji character.
@@ -198,7 +204,6 @@ class kanjidicHandler(xml.sax.handler.ContentHandler):
 
 
 
-
         kf = open("kanjidic2_" + self.date_of_creation + ".db","w")
         kf.close()
         connection = sqlite3.connect("kanjidic2_" + self.date_of_creation + ".db" )
@@ -253,7 +258,9 @@ handler = kanjidicHandler()
 
 
 import xml.sax
-ff = open("kanjidic2.xml","r")
+#ff = open("kanjidic2.xml","r")
+kf2 = UR.urlretrieve(kanji_dic_link,downloaded_kanjidic_fileName)
+kf3 = gzip.open(downloaded_kanjidic_fileName)
 xml.sax.make_parser()
-xml.sax.parse(ff, handler)
+xml.sax.parse(kf3, handler)
 
